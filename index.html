@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vérification Email</title>
+    <script src="https://cdn.jsdelivr.net/npm/express@4.17.1/dist/express.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/nodemailer@6.6.3/dist/nodemailer.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/body-parser@1.19.0/dist/body-parser.min.js"></script>
+</head>
+<body>
+
+<h1>Vérification Email</h1>
+
+<!-- Formulaire d'envoi de code -->
+<div>
+    <input type="email" id="email" placeholder="Entrez votre email">
+    <button onclick="sendCode()">Envoyer le code</button>
+</div>
+
+<!-- Formulaire de vérification du code -->
+<div id="verificationForm" style="display: none;">
+    <input type="text" id="verificationCode" placeholder="Entrez le code de vérification">
+    <button onclick="verifyCode()">Vérifier le code</button>
+</div>
+
+<p id="message"></p>
+
+<script>
+// Code du backend - Simulation dans le frontend pour simplification
+
+// Fonction pour envoyer le code par email
+function sendCode() {
+    const email = document.getElementById('email').value;
+    const verificationCode = Math.floor(100000 + Math.random() * 900000);  // Génère un code à 6 chiffres
+
+    // Configuration de l'email (Nodemailer simulation)
+    const transporter = nodemailer.createTransport({
+        service: 'gmail',
+        auth: {
+            user: 'ton.email@gmail.com', // Remplace par ton adresse email
+            pass: 'ton_mot_de_passe' // Remplace par ton mot de passe
+        }
+    });
+
+    const mailOptions = {
+        from: 'ton.email@gmail.com',
+        to: email,
+        subject: 'Code de vérification',
+        text: `Voici votre code de vérification : ${verificationCode}`
+    };
+
+    // Envoie de l'email
+    transporter.sendMail(mailOptions, function (error, info) {
+        if (error) {
+            document.getElementById('message').textContent = 'Erreur lors de l\'envoi de l\'email.';
+            console.log(error);
+        } else {
+            document.getElementById('verificationForm').style.display = 'block';
+            document.getElementById('message').textContent = 'Code envoyé à votre email. Vérifiez votre boîte de réception !';
+        }
+    });
+}
+
+// Fonction pour vérifier le code
+function verifyCode() {
+    const code = document.getElementById('verificationCode').value;
+
+    // Comparer le code entré avec celui généré (en simplification ici, code statique)
+    if (code === "123456") {
+        document.getElementById('message').textContent = 'Vérification réussie !';
+    } else {
+        document.getElementById('message').textContent = 'Code incorrect, essayez à nouveau.';
+    }
+}
+
+</script>
+
+</body>
+</html>
